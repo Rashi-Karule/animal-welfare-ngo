@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Report a missing pet - Missing Pet Helpline and community alerts.">
+  <title>Missing Pet Helpline | Juno The Choco Lab</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <header class="site-header" id="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">Juno the <span>Choco Lab</span></a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span aria-hidden="true">☰</span></button>
+      <nav>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="adopt.html">Adopt</a></li>
+          <li><a href="community.html">Community</a></li>
+          <li><a href="missing-pet.html" class="active">Missing Pet</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="volunteer.html">Volunteer</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>Missing Pet Helpline</h1>
+        <p>Report a missing pet and reach our community for faster reunions</p>
+      </div>
+    </section>
+
+    <!-- Instructions -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="content-section reveal">
+          <h2>How to Report a Missing Pet</h2>
+          <ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
+            <li>Fill the form below with as much detail as possible—pet's name, breed/description, last seen location,
+              date, and your contact info.</li>
+            <li>Upload a clear photo if you have one (you can share it via email after submitting).</li>
+            <li>We will share your report on our community channels and create an alert so others can help look.</li>
+            <li>Keep your phone on and check back—we'll update you if we get any leads.</li>
+          </ol>
+          <p><strong>Tip:</strong> Post on local Facebook groups, WhatsApp neighbourhood groups, and put up posters near
+            the last seen area. The sooner you act, the better the chances.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Report form -->
+    <section class="section">
+      <div class="container">
+        <div class="section-title">
+          <h2>Report Missing Pet</h2>
+          <p>All fields marked * are required</p>
+        </div>
+        <div class="content-section" style="max-width: 600px;">
+          <form id="missing-pet-form" class="reveal">
+            <div class="form-group">
+              <label for="mp-name">Your name *</label>
+              <input type="text" id="mp-name" name="name" required>
+              <span class="form-error" id="mp-name-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="mp-email">Email *</label>
+              <input type="email" id="mp-email" name="email" required>
+              <span class="form-error" id="mp-email-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="mp-phone">Phone *</label>
+              <input type="tel" id="mp-phone" name="phone" required>
+              <span class="form-error" id="mp-phone-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="mp-pet-name">Pet's name *</label>
+              <input type="text" id="mp-pet-name" name="pet_name" required>
+            </div>
+            <div class="form-group">
+              <label for="mp-species">Species / Breed</label>
+              <input type="text" id="mp-species" name="species" placeholder="e.g. Indie dog, cat">
+            </div>
+            <div class="form-group">
+              <label for="mp-description">Description (colour, size, distinguishing marks) *</label>
+              <textarea id="mp-description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+              <label for="mp-last-seen">Last seen location (area, landmark) *</label>
+              <input type="text" id="mp-last-seen" name="last_seen" required>
+            </div>
+            <div class="form-group">
+              <label for="mp-date">Date last seen *</label>
+              <input type="date" id="mp-date" name="date" required>
+            </div>
+            <div class="form-group">
+              <label for="mp-message">Any other details</label>
+              <textarea id="mp-message" name="message"></textarea>
+            </div>
+            <p id="missing-pet-success" class="form-success" style="display: none;"></p>
+            <button type="submit" class="btn btn-primary">Submit Report</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community alerts placeholder -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-title">
+          <h2>Community Alerts</h2>
+          <p>Recent missing pet reports (shared with consent)</p>
+        </div>
+        <div class="content-section reveal">
+          <p style="color: var(--color-text-muted);">When you submit a report, we may list a brief alert here and on our
+            social media to help spread the word. Check back for updates.</p>
+          <div
+            style="margin-top: 1.5rem; padding: 1.5rem; background: var(--color-beige); border-radius: var(--radius-md);">
+            <p><strong>No active alerts right now.</strong> If your pet is missing, use the form above to report.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <h4>Navigate</h4>
+        <a href="about.html">About</a>
+        <a href="adopt.html">Adopt</a>
+        <a href="community.html">Community</a>
+        <a href="blog.html">Blog</a>
+        <a href="volunteer.html">Volunteer</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="missing-pet.html">Missing Pet Helpline</a>
+        <a href="blog.html">Advocacy & Blog</a>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <div class="social-links">
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+          <a href="https://www.instagram.com/juno.thechocolab?igsh=cG9lODJuc3VwM3Nr" target="_blank" rel="noopener"
+            aria-label="Instagram">📷</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
+          <a href="https://youtube.com/@malvika.vazalwar?si=iDr0T2ovxwwsHHtM" target="_blank" rel="noopener"
+            aria-label="YouTube">▶</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Juno The Choco Lab. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

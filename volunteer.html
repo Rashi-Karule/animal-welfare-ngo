@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Volunteer with us - Sign up to help animals.">
+  <title>Volunteer | Juno The Choco Lab</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <header class="site-header" id="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">Juno the <span>Choco Lab</span></a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span aria-hidden="true">☰</span></button>
+      <nav>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="adopt.html">Adopt</a></li>
+          <li><a href="community.html">Community</a></li>
+          <li><a href="missing-pet.html">Missing Pet</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="volunteer.html" class="active">Volunteer</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>Volunteer</h1>
+        <p>Your time and skills can change lives. Join our volunteer community.</p>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="content-section reveal">
+          <h2>Ways You Can Help</h2>
+          <ul>
+            <li><strong>Fostering</strong> — Provide a temporary home for rescued puppies until they are adopted.</li>
+            <li><strong>Rescue & transport</strong> — Help with pickups, vet visits, and relocating animals.</li>
+            <li><strong>Events & fundraisers</strong> — Assist at adoption drives, thrift sales, and awareness events.
+            </li>
+            <li><strong>Content & social media</strong> — Share stories, create posts, and manage our online presence.
+            </li>
+            <li><strong>Admin & coordination</strong> — Adoption forms, follow-ups, and volunteer coordination.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-title">
+          <h2>Volunteer Sign-Up</h2>
+          <p>Tell us about yourself and how you'd like to help</p>
+        </div>
+        <div class="content-section" style="max-width: 600px;">
+          <form id="volunteer-form" class="reveal">
+            <div class="form-group">
+              <label for="vol-name">Name *</label>
+              <input type="text" id="vol-name" name="name" required>
+              <span class="form-error" id="vol-name-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="vol-email">Email *</label>
+              <input type="email" id="vol-email" name="email" required>
+              <span class="form-error" id="vol-email-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="vol-phone">Phone *</label>
+              <input type="tel" id="vol-phone" name="phone" required>
+              <span class="form-error" id="vol-phone-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="vol-city">City *</label>
+              <input type="text" id="vol-city" name="city" required>
+              <span class="form-error" id="vol-city-error"></span>
+            </div>
+            <div class="form-group">
+              <label for="vol-help">How do you want to help? *</label>
+              <select id="vol-help" name="help" required>
+                <option value="">Select an option</option>
+                <option value="fostering">Fostering</option>
+                <option value="rescue-transport">Rescue & transport</option>
+                <option value="events">Events & fundraisers</option>
+                <option value="content">Content & social media</option>
+                <option value="admin">Admin & coordination</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="vol-message">Message</label>
+              <textarea id="vol-message" name="message" placeholder="Anything else you'd like us to know?"></textarea>
+            </div>
+            <p id="volunteer-success" class="form-success" style="display: none;"></p>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <h4>Navigate</h4>
+        <a href="about.html">About</a>
+        <a href="adopt.html">Adopt</a>
+        <a href="community.html">Community</a>
+        <a href="blog.html">Blog</a>
+        <a href="volunteer.html">Volunteer</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="missing-pet.html">Missing Pet Helpline</a>
+        <a href="blog.html">Advocacy & Blog</a>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <div class="social-links">
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+          <a href="https://www.instagram.com/juno.thechocolab?igsh=cG9lODJuc3VwM3Nr" target="_blank" rel="noopener"
+            aria-label="Instagram">📷</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
+          <a href="https://youtube.com/@malvika.vazalwar?si=iDr0T2ovxwwsHHtM" target="_blank" rel="noopener"
+            aria-label="YouTube">▶</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Juno The Choco Lab. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
