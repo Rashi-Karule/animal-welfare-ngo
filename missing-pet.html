@@ -63,7 +63,7 @@
           <p>All fields marked * are required</p>
         </div>
         <div class="content-section" style="max-width: 600px;">
-          <form id="missing-pet-form" class="reveal">
+          <form id="missing-pet-form" class="reveal" enctype="multipart/form-data">
             <div class="form-group">
               <label for="mp-name">Your name *</label>
               <input type="text" id="mp-name" name="name" required>
@@ -102,6 +102,10 @@
             <div class="form-group">
               <label for="mp-message">Any other details</label>
               <textarea id="mp-message" name="message"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="mp-photo">Upload Pet Photo</label>
+              <input type="file" id="mp-photo" name="photo" accept="image/*">
             </div>
             <p id="missing-pet-success" class="form-success" style="display: none;"></p>
             <button type="submit" class="btn btn-primary">Submit Report</button>
