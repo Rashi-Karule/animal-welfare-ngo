@@ -109,7 +109,8 @@
               <input type="file" id="mp-photo" name="photo" accept="image/*">
             </div>
             <p id="missing-pet-success" class="form-success" style="display: none;"></p>
-            <button type="submit" class="btn btn-primary">Submit Report</button>
+            <button type="submit" class="btn btn-primary" id="mp-submit-btn">Submit Report</button>
+            <p id="mp-loading" style="display:none; color: #2d5016; margin-top: 1rem;">⏳ Submitting, please wait...</p>
           </form>
         </div>
       </div>
@@ -166,6 +167,7 @@
       <p>© 2025 Juno The Choco Lab. All rights reserved.</p>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/script.js"></script>
 </body>
 

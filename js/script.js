@@ -126,181 +126,135 @@
   }
 
   // ---------- Newsletter form ----------
-  var newsletterForm = document.getElementById('newsletter-form');
-  if (newsletterForm) {
-    newsletterForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var emailInput = newsletterForm.querySelector('input[type="email"]');
-      var msgEl = document.getElementById('newsletter-message');
-      var email = (emailInput && emailInput.value) || '';
-      if (!validateEmail(email)) {
-        if (msgEl) {
-          msgEl.style.display = 'block';
-          msgEl.textContent = 'Please enter a valid email address.';
-          msgEl.style.color = '#c45c5c';
-        }
-        return;
-      }
-      if (msgEl) {
-        msgEl.style.display = 'block';
-        msgEl.textContent = 'Thank you for subscribing! We\'ll keep you updated.';
-        msgEl.style.color = '';
-      }
-      newsletterForm.reset();
-    });
-  }
+
 
   // ---------- Contact form ----------
-  var contactForm = document.getElementById('contact-form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      clearFormErrors('contact-form');
-      var name = document.getElementById('contact-name').value.trim();
-      var email = document.getElementById('contact-email').value.trim();
-      var message = document.getElementById('contact-message').value.trim();
-      var valid = true;
 
-      if (!name) {
-        showError('contact-name', 'Please enter your name.');
-        valid = false;
-      }
-      if (!email) {
-        showError('contact-email', 'Please enter your email.');
-        valid = false;
-      } else if (!validateEmail(email)) {
-        showError('contact-email', 'Please enter a valid email.');
-        valid = false;
-      }
-      if (!message) {
-        showError('contact-message', 'Please enter a message.');
-        valid = false;
-      }
-
-      if (!valid) return;
-
-      var successEl = document.getElementById('contact-success');
-      if (successEl) {
-        successEl.style.display = 'block';
-        successEl.textContent = 'Thank you! We have received your message and will get back to you soon.';
-      }
-      contactForm.reset();
-    });
-  }
 
   // ---------- Volunteer form ----------
-  var volunteerForm = document.getElementById('volunteer-form');
-  if (volunteerForm) {
-    volunteerForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      clearFormErrors('volunteer-form');
-      var name = document.getElementById('vol-name').value.trim();
-      var email = document.getElementById('vol-email').value.trim();
-      var phone = document.getElementById('vol-phone').value.trim();
-      var city = document.getElementById('vol-city').value.trim();
-      var help = document.getElementById('vol-help').value;
-      var valid = true;
 
-      if (!name) {
-        showError('vol-name', 'Please enter your name.');
-        valid = false;
-      }
-      if (!email) {
-        showError('vol-email', 'Please enter your email.');
-        valid = false;
-      } else if (!validateEmail(email)) {
-        showError('vol-email', 'Please enter a valid email.');
-        valid = false;
-      }
-      if (!phone) {
-        showError('vol-phone', 'Please enter your phone number.');
-        valid = false;
-      } else if (!validatePhone(phone)) {
-        showError('vol-phone', 'Please enter a valid phone number.');
-        valid = false;
-      }
-      if (!city) {
-        showError('vol-city', 'Please enter your city.');
-        valid = false;
-      }
-      if (!help) {
-        var helpEl = document.getElementById('vol-help');
-        if (helpEl) helpEl.classList.add('error');
-        valid = false;
-      }
-
-      if (!valid) return;
-
-      var successEl = document.getElementById('volunteer-success');
-      if (successEl) {
-        successEl.style.display = 'block';
-        successEl.textContent = 'Thank you for signing up! We\'ll be in touch soon.';
-      }
-      volunteerForm.reset();
-    });
-  }
 
   // ---------- Missing pet form ----------
-  var missingPetForm = document.getElementById('missing-pet-form');
-  if (missingPetForm) {
-    missingPetForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      clearFormErrors('missing-pet-form');
-      var name = document.getElementById('mp-name').value.trim();
-      var email = document.getElementById('mp-email').value.trim();
-      var phone = document.getElementById('mp-phone').value.trim();
-      var petName = document.getElementById('mp-pet-name').value.trim();
-      var description = document.getElementById('mp-description').value.trim();
-      var lastSeen = document.getElementById('mp-last-seen').value.trim();
-      var date = document.getElementById('mp-date').value;
-      var valid = true;
 
-      if (!name) {
-        showError('mp-name', 'Please enter your name.');
-        valid = false;
-      }
-      if (!email) {
-        showError('mp-email', 'Please enter your email.');
-        valid = false;
-      } else if (!validateEmail(email)) {
-        showError('mp-email', 'Please enter a valid email.');
-        valid = false;
-      }
-      if (!phone) {
-        showError('mp-phone', 'Please enter your phone number.');
-        valid = false;
-      } else if (!validatePhone(phone)) {
-        showError('mp-phone', 'Please enter a valid phone number.');
-        valid = false;
-      }
-      if (!petName) {
-        showError('mp-pet-name', 'Please enter pet\'s name.');
-        valid = false;
-      }
-      if (!description) {
-        var descEl = document.getElementById('mp-description');
-        if (descEl) descEl.classList.add('error');
-        valid = false;
-      }
-      if (!lastSeen) {
-        var lastSeenEl = document.getElementById('mp-last-seen');
-        if (lastSeenEl) lastSeenEl.classList.add('error');
-        valid = false;
-      }
-      if (!date) {
-        var dateEl = document.getElementById('mp-date');
-        if (dateEl) dateEl.classList.add('error');
-        valid = false;
-      }
-
-      if (!valid) return;
-
-      var successEl = document.getElementById('missing-pet-success');
-      if (successEl) {
-        successEl.style.display = 'block';
-        successEl.textContent = 'Your report has been submitted. We will share it with our community and get in touch if we have any leads.';
-      }
-      missingPetForm.reset();
-    });
-  }
 })();
+
+// ========== SUPABASE CONFIG ==========
+const SUPABASE_URL = 'https://jstvrnpostcpzywpdpve.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_jy_ELTA8Vj5y0UZbPvw2aw_X3AmxVsQ';
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ========== VOLUNTEER FORM ==========
+const volunteerFormSB = document.getElementById('volunteer-form');
+if (volunteerFormSB) {
+  volunteerFormSB.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = {
+      name: document.getElementById('vol-name').value.trim(),
+      email: document.getElementById('vol-email').value.trim(),
+      phone: document.getElementById('vol-phone').value.trim(),
+      city: document.getElementById('vol-city').value.trim(),
+      how_to_help: document.getElementById('vol-help').value,
+      message: document.getElementById('vol-message') ? document.getElementById('vol-message').value.trim() : ''
+    };
+    const { error } = await supabaseClient.from('volunteer_signups').insert([formData]);
+    if (error) {
+      alert('Something went wrong! Please try again.');
+      console.error(error);
+    } else {
+      alert('Thank you for signing up! We will be in touch soon 🐾');
+      volunteerFormSB.reset();
+    }
+  });
+}
+
+// ========== CONTACT FORM ==========
+const contactFormSB = document.getElementById('contact-form');
+if (contactFormSB) {
+  contactFormSB.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const formData = {
+      name: document.getElementById('contact-name').value.trim(),
+      email: document.getElementById('contact-email').value.trim(),
+      subject: document.getElementById('contact-subject') ? document.getElementById('contact-subject').value.trim() : '',
+      message: document.getElementById('contact-message').value.trim()
+    };
+    const { error } = await supabaseClient.from('contact_messages').insert([formData]);
+    if (error) {
+      alert('Something went wrong! Please try again.');
+      console.error(error);
+    } else {
+      alert('Thank you! We have received your message 🐾');
+      contactFormSB.reset();
+    }
+  });
+}
+
+// ========== NEWSLETTER FORM ==========
+const newsletterFormSB = document.getElementById('newsletter-form');
+if (newsletterFormSB) {
+  newsletterFormSB.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const email = newsletterFormSB.querySelector('input[type="email"]').value.trim();
+    const { error } = await supabaseClient.from('newsletter_subscribers').insert([{ email }]);
+    if (error) {
+      alert('Something went wrong! Please try again.');
+      console.error(error);
+    } else {
+      alert('Thank you for subscribing! 🐾');
+      newsletterFormSB.reset();
+    }
+  });
+}
+
+// ========== MISSING PET FORM ==========
+const missingPetFormSB = document.getElementById('missing-pet-form');
+if (missingPetFormSB) {
+  missingPetFormSB.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    document.getElementById('mp-submit-btn').disabled = true;
+    document.getElementById('mp-submit-btn').textContent = 'Submitting...';
+    document.getElementById('mp-loading').style.display = 'block';
+
+    let photoUrl = null;
+    const photoInput = document.getElementById('mp-photo');
+    if (photoInput && photoInput.files[0]) {
+      const file = photoInput.files[0];
+      const fileName = Date.now() + '_' + file.name;
+      const { error: uploadError } = await supabaseClient.storage
+        .from('pet-photos')
+        .upload(fileName, file);
+      if (!uploadError) {
+        const { data } = supabaseClient.storage.from('pet-photos').getPublicUrl(fileName);
+        photoUrl = data.publicUrl;
+      }
+    }
+
+    const formData = {
+      name: document.getElementById('mp-name').value.trim(),
+      email: document.getElementById('mp-email').value.trim(),
+      phone: document.getElementById('mp-phone').value.trim(),
+      pet_name: document.getElementById('mp-pet-name').value.trim(),
+      species_breed: document.getElementById('mp-species') ? document.getElementById('mp-species').value.trim() : '',
+      description: document.getElementById('mp-description').value.trim(),
+      last_seen_location: document.getElementById('mp-last-seen').value.trim(),
+      date_last_seen: document.getElementById('mp-date').value,
+      other_details: document.getElementById('mp-message') ? document.getElementById('mp-message').value.trim() : '',
+      photo_url: photoUrl
+    };
+
+    const { error } = await supabaseClient.from('missing_pets').insert([formData]);
+
+    document.getElementById('mp-submit-btn').disabled = false;
+    document.getElementById('mp-submit-btn').textContent = 'Submit Report';
+    document.getElementById('mp-loading').style.display = 'none';
+
+    if (error) {
+      alert('Something went wrong! Please try again.');
+      console.error(error);
+    } else {
+      alert('Report submitted! We will contact you soon 🐾');
+      missingPetFormSB.reset();
+    }
+  });
+}
