@@ -131,15 +131,6 @@ cd animal-welfare-ngo
 ```
 
 > ⚠️ Must use Live Server (`http://`) — Supabase does not work on `file://` protocol
-
-### Deploy
-```bash
-git add .
-git commit -m "your message"
-git push origin main
-# Vercel auto-deploys on every push! ✅
-```
-
 ---
 
 ## 🔐 Admin Access
