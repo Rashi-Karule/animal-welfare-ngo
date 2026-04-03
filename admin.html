@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Juno The Choco Lab</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f0e8;
+            color: #333;
+        }
+
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-box h2 {
+            color: #2d5016;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 0.8rem;
+            background: #2d5016;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .login-box button:hover {
+            background: #3d6b1f;
+        }
+
+        .error-msg {
+            color: red;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .dashboard {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dash-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dash-header h1 {
+            color: #2d5016;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1.2rem;
+            background: #c45c5c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.6rem 1.2rem;
+            border: 2px solid #2d5016;
+            background: white;
+            color: #2d5016;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .tab-btn.active {
+            background: #2d5016;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        th {
+            background: #2d5016;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        td {
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+            vertical-align: top;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background: #e8f5e9;
+            color: #2d5016;
+        }
+
+        .photo-link {
+            color: #2d5016;
+            text-decoration: underline;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .count-badge {
+            background: #2d5016;
+            color: white;
+            border-radius: 20px;
+            padding: 0.1rem 0.6rem;
+            font-size: 0.8rem;
+            margin-left: 0.5rem;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #2d5016;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="login-screen">
+        <div class="login-box">
+            <h2>🐾 Admin Login</h2>
+            <p style="color:#666; margin-bottom:1.5rem;">Juno The Choco Lab</p>
+            <input type="password" id="admin-password" placeholder="Enter admin password">
+            <button onclick="checkPassword()">Login</button>
+            <p class="error-msg" id="login-error"></p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+        <div class="dash-header">
+            <h1>🐾 Admin Dashboard</h1>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <h3 id="count-volunteers">-</h3>
+                <p>Volunteers</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="count-missing">-</h3>
+                <p>Missing Pet Reports</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="count-contact">-</h3>
+                <p>Contact Messages</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="count-newsletter">-</h3>
+                <p>Newsletter Subscribers</p>
+            </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('volunteers')">Volunteers <span class="count-badge"
+                    id="tab-count-volunteers">0</span></button>
+            <button class="tab-btn" onclick="showTab('missing')">Missing Pets <span class="count-badge"
+                    id="tab-count-missing">0</span></button>
+            <button class="tab-btn" onclick="showTab('contact')">Contact Messages <span class="count-badge"
+                    id="tab-count-contact">0</span></button>
+            <button class="tab-btn" onclick="showTab('newsletter')">Newsletter <span class="count-badge"
+                    id="tab-count-newsletter">0</span></button>
+        </div>
+
+        <!-- VOLUNTEERS TABLE -->
+        <div class="tab-content active" id="tab-volunteers">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>City</th>
+                        <th>How to Help</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="volunteers-body">
+                    <tr>
+                        <td colspan="8" class="loading">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- MISSING PETS TABLE -->
+        <div class="tab-content" id="tab-missing">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Reporter</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Pet Name</th>
+                        <th>Species/Breed</th>
+                        <th>Last Seen</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Photo</th>
+                    </tr>
+                </thead>
+                <tbody id="missing-body">
+                    <tr>
+                        <td colspan="10" class="loading">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CONTACT TABLE -->
+        <div class="tab-content" id="tab-contact">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="contact-body">
+                    <tr>
+                        <td colspan="6" class="loading">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- NEWSLETTER TABLE -->
+        <div class="tab-content" id="tab-newsletter">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Email</th>
+                        <th>Subscribed On</th>
+                    </tr>
+                </thead>
+                <tbody id="newsletter-body">
+                    <tr>
+                        <td colspan="3" class="loading">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // ===== SUPABASE =====
+        const SUPABASE_URL = 'https://jstvrnpostcpzywpdpve.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_jy_ELTA8Vj5y0UZbPvw2aw_X3AmxVsQ';
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // ===== PASSWORD =====
+        const ADMIN_PASSWORD = 'malvika@juno';
+
+        function checkPassword() {
+            const input = document.getElementById('admin-password').value;
+            if (input === ADMIN_PASSWORD) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadAllData();
+            } else {
+                document.getElementById('login-error').textContent = 'Wrong password. Try again!';
+            }
+        }
+
+        document.getElementById('admin-password').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        function logout() {
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('admin-password').value = '';
+        }
+
+        // ===== TABS =====
+        function showTab(name) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // ===== FORMAT DATE =====
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            return new Date(dateStr).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
+        // ===== LOAD ALL DATA =====
+        async function loadAllData() {
+            await Promise.all([
+                loadVolunteers(),
+                loadMissingPets(),
+                loadContacts(),
+                loadNewsletter()
+            ]);
+        }
+
+        // ===== VOLUNTEERS =====
+        async function loadVolunteers() {
+            const { data, error } = await supabaseClient
+                .from('volunteer_signups')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) { console.error(error); return; }
+
+            const count = data.length;
+            document.getElementById('count-volunteers').textContent = count;
+            document.getElementById('tab-count-volunteers').textContent = count;
+
+            const tbody = document.getElementById('volunteers-body');
+            if (count === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="loading">No volunteers yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.name || '-'}</td>
+        <td>${row.email || '-'}</td>
+        <td>${row.phone || '-'}</td>
+        <td>${row.city || '-'}</td>
+        <td><span class="badge">${row.how_to_help || '-'}</span></td>
+        <td>${row.message || '-'}</td>
+        <td>${formatDate(row.created_at)}</td>
+      </tr>
+    `).join('');
+        }
+
+        // ===== MISSING PETS =====
+        async function loadMissingPets() {
+            const { data, error } = await supabaseClient
+                .from('missing_pets')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) { console.error(error); return; }
+
+            const count = data.length;
+            document.getElementById('count-missing').textContent = count;
+            document.getElementById('tab-count-missing').textContent = count;
+
+            const tbody = document.getElementById('missing-body');
+            if (count === 0) {
+                tbody.innerHTML = '<tr><td colspan="10" class="loading">No reports yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.name || '-'}</td>
+        <td>${row.email || '-'}</td>
+        <td>${row.phone || '-'}</td>
+        <td>${row.pet_name || '-'}</td>
+        <td>${row.species_breed || '-'}</td>
+        <td>${row.last_seen_location || '-'}</td>
+        <td>${formatDate(row.date_last_seen)}</td>
+        <td>${row.description || '-'}</td>
+        <td>${row.photo_url ? `<a href="${row.photo_url}" target="_blank" class="photo-link">View Photo</a>` : '-'}</td>
+      </tr>
+    `).join('');
+        }
+
+        // ===== CONTACT =====
+        async function loadContacts() {
+            const { data, error } = await supabaseClient
+                .from('contact_messages')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) { console.error(error); return; }
+
+            const count = data.length;
+            document.getElementById('count-contact').textContent = count;
+            document.getElementById('tab-count-contact').textContent = count;
+
+            const tbody = document.getElementById('contact-body');
+            if (count === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="loading">No messages yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.name || '-'}</td>
+        <td>${row.email || '-'}</td>
+        <td>${row.subject || '-'}</td>
+        <td>${row.message || '-'}</td>
+        <td>${formatDate(row.created_at)}</td>
+      </tr>
+    `).join('');
+        }
+
+        // ===== NEWSLETTER =====
+        async function loadNewsletter() {
+            const { data, error } = await supabaseClient
+                .from('newsletter_subscribers')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) { console.error(error); return; }
+
+            const count = data.length;
+            document.getElementById('count-newsletter').textContent = count;
+            document.getElementById('tab-count-newsletter').textContent = count;
+
+            const tbody = document.getElementById('newsletter-body');
+            if (count === 0) {
+                tbody.innerHTML = '<tr><td colspan="3" class="loading">No subscribers yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.email || '-'}</td>
+        <td>${formatDate(row.created_at)}</td>
+      </tr>
+    `).join('');
+        }
+    </script>
+</body>
+
+</html>
