@@ -153,7 +153,7 @@ Built with 💚 by **Rashi Karule**
 
 ## 💛 Built For
 
-Built for **Malvika Vazalwar** — animal welfare advocate, founder of Juno The Choco Lab, and the human behind Juno 🐶
+Built for **Malvika Vazalwar** — Animal welfare advocate, Founder of Juno The Choco Lab, and the human behind Juno 🐶
 
 > *"Their treatment reflects the consciousness of our society."*
 
