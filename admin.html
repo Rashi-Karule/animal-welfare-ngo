@@ -208,6 +208,56 @@
             color: #666;
             font-size: 0.9rem;
         }
+
+        .admin-panel {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-panel h3 {
+            margin-bottom: 0.75rem;
+            color: #2d5016;
+        }
+
+        .admin-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .admin-form-grid input,
+        .admin-form-grid textarea {
+            width: 100%;
+            padding: 0.65rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .admin-form-grid textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .small-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 0.75rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: white;
+        }
+
+        .found-btn {
+            background: #2d5016;
+        }
+
+        .reopen-btn {
+            background: #9d6a2f;
+        }
     </style>
 </head>
 
@@ -263,6 +313,25 @@
                     id="tab-count-newsletter">0</span></button>
         </div>
 
+        <div class="admin-panel">
+            <h3>Add Missing Pet (Admin)</h3>
+            <form id="admin-missing-pet-form">
+                <div class="admin-form-grid">
+                    <input type="text" id="admin-pet-name" placeholder="Pet name *" required>
+                    <input type="text" id="admin-species" placeholder="Species / breed">
+                    <input type="text" id="admin-last-seen" placeholder="Last seen location *" required>
+                    <input type="date" id="admin-date-last-seen" required>
+                    <input type="text" id="admin-reporter-name" placeholder="Reporter name *" required>
+                    <input type="email" id="admin-reporter-email" placeholder="Reporter email *" required>
+                    <input type="text" id="admin-reporter-phone" placeholder="Reporter phone *" required>
+                    <input type="file" id="admin-pet-photo" accept="image/*">
+                    <textarea id="admin-pet-description" placeholder="Description *" required></textarea>
+                    <textarea id="admin-other-details" placeholder="Other details (optional)"></textarea>
+                </div>
+                <button type="submit" class="logout-btn" style="margin-top:0.75rem; background:#2d5016;">Add Missing Pet</button>
+            </form>
+        </div>
+
         <!-- VOLUNTEERS TABLE -->
         <div class="tab-content active" id="tab-volunteers">
             <table>
@@ -300,12 +369,14 @@
                         <th>Last Seen</th>
                         <th>Date</th>
                         <th>Description</th>
+                        <th>Status</th>
                         <th>Photo</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="missing-body">
                     <tr>
-                        <td colspan="10" class="loading">Loading...</td>
+                        <td colspan="12" class="loading">Loading...</td>
                     </tr>
                 </tbody>
             </table>
@@ -357,6 +428,9 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_jy_ELTA8Vj5y0UZbPvw2aw_X3AmxVsQ';
         const { createClient } = supabase;
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const FOUND_MARKER = '[[FOUND]]';
+        // Set this to your deployed Supabase Edge Function URL.
+        const MISSING_PET_NOTIFY_FUNCTION_URL = '';
 
         // ===== PASSWORD =====
         const ADMIN_PASSWORD = 'malvika@juno';
@@ -394,6 +468,27 @@
         function formatDate(dateStr) {
             if (!dateStr) return '-';
             return new Date(dateStr).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
+        function isPetFound(row) {
+            return (row.other_details || '').includes(FOUND_MARKER);
+        }
+
+        function cleanOtherDetails(otherDetails) {
+            return (otherDetails || '').replace(FOUND_MARKER, '').trim();
+        }
+
+        async function notifyMissingPetSubscribers(eventType, petData) {
+            if (!MISSING_PET_NOTIFY_FUNCTION_URL) return;
+            try {
+                await fetch(MISSING_PET_NOTIFY_FUNCTION_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ eventType: eventType, pet: petData })
+                });
+            } catch (error) {
+                console.error('Email notification failed:', error);
+            }
         }
 
         // ===== LOAD ALL DATA =====
@@ -453,7 +548,7 @@
 
             const tbody = document.getElementById('missing-body');
             if (count === 0) {
-                tbody.innerHTML = '<tr><td colspan="10" class="loading">No reports yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="12" class="loading">No reports yet</td></tr>';
                 return;
             }
             tbody.innerHTML = data.map((row, i) => `
@@ -467,9 +562,86 @@
         <td>${row.last_seen_location || '-'}</td>
         <td>${formatDate(row.date_last_seen)}</td>
         <td>${row.description || '-'}</td>
+        <td>${isPetFound(row) ? '<span class="badge">Found</span>' : '<span class="badge" style="background:#fff2df;color:#8a4b00;">Missing</span>'}</td>
         <td>${row.photo_url ? `<a href="${row.photo_url}" target="_blank" class="photo-link">View Photo</a>` : '-'}</td>
+        <td>
+          <button class="small-btn ${isPetFound(row) ? 'reopen-btn' : 'found-btn'}"
+            onclick="toggleFoundStatus('${row.id}', '${(row.other_details || '').replace(/'/g, "\\'")}', ${isPetFound(row)})">
+            ${isPetFound(row) ? 'Mark Missing' : 'Mark Found'}
+          </button>
+        </td>
       </tr>
     `).join('');
+        }
+
+        async function toggleFoundStatus(id, otherDetails, currentlyFound) {
+            const baseDetails = cleanOtherDetails(otherDetails);
+            let nextDetails = baseDetails;
+            if (!currentlyFound) {
+                const note = prompt('Optional note for found update (shown on public page):', 'Pet found and reunited.');
+                if (note === null) return;
+                nextDetails = `${FOUND_MARKER} ${note.trim() || 'Pet found and reunited.'}`.trim();
+            }
+            const { error } = await supabaseClient
+                .from('missing_pets')
+                .update({ other_details: nextDetails })
+                .eq('id', id);
+            if (error) {
+                alert('Update failed. Please try again.');
+                console.error(error);
+                return;
+            }
+            if (!currentlyFound) {
+                await notifyMissingPetSubscribers('pet_found', { id: id, other_details: nextDetails });
+            }
+            loadMissingPets();
+        }
+
+        const adminMissingPetForm = document.getElementById('admin-missing-pet-form');
+        if (adminMissingPetForm) {
+            adminMissingPetForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                let photoUrl = null;
+                const photoInput = document.getElementById('admin-pet-photo');
+                if (photoInput.files[0]) {
+                    const file = photoInput.files[0];
+                    const fileName = Date.now() + '_' + file.name;
+                    const { error: uploadError } = await supabaseClient.storage
+                        .from('pet-photos')
+                        .upload(fileName, file);
+                    if (uploadError) {
+                        alert('Photo upload failed. You can still add without photo.');
+                        console.error(uploadError);
+                    } else {
+                        const { data } = supabaseClient.storage.from('pet-photos').getPublicUrl(fileName);
+                        photoUrl = data.publicUrl;
+                    }
+                }
+
+                const payload = {
+                    name: document.getElementById('admin-reporter-name').value.trim(),
+                    email: document.getElementById('admin-reporter-email').value.trim(),
+                    phone: document.getElementById('admin-reporter-phone').value.trim(),
+                    pet_name: document.getElementById('admin-pet-name').value.trim(),
+                    species_breed: document.getElementById('admin-species').value.trim(),
+                    description: document.getElementById('admin-pet-description').value.trim(),
+                    last_seen_location: document.getElementById('admin-last-seen').value.trim(),
+                    date_last_seen: document.getElementById('admin-date-last-seen').value,
+                    other_details: document.getElementById('admin-other-details').value.trim(),
+                    photo_url: photoUrl
+                };
+
+                const { error } = await supabaseClient.from('missing_pets').insert([payload]);
+                if (error) {
+                    alert('Failed to add missing pet.');
+                    console.error(error);
+                    return;
+                }
+                await notifyMissingPetSubscribers('missing_reported', payload);
+                adminMissingPetForm.reset();
+                alert('Missing pet added successfully.');
+                loadMissingPets();
+            });
         }
 
         // ===== CONTACT =====

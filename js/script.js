@@ -143,6 +143,31 @@ const SUPABASE_URL = 'https://jstvrnpostcpzywpdpve.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_jy_ELTA8Vj5y0UZbPvw2aw_X3AmxVsQ';
 const { createClient } = supabase;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const FOUND_MARKER = '[[FOUND]]';
+// Set this to your deployed Supabase Edge Function URL.
+const MISSING_PET_NOTIFY_FUNCTION_URL = '';
+
+function isPetFound(record) {
+  return (record.other_details || '').includes(FOUND_MARKER);
+}
+
+function formatFoundMessage(otherDetails) {
+  return (otherDetails || '').replace(FOUND_MARKER, '').trim();
+}
+
+async function notifyMissingPetSubscribers(eventType, petData) {
+  if (!MISSING_PET_NOTIFY_FUNCTION_URL) return;
+  try {
+    await fetch(MISSING_PET_NOTIFY_FUNCTION_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ eventType: eventType, pet: petData })
+    });
+  } catch (error) {
+    // Avoid blocking user flow if email system is unavailable.
+    console.error('Email notification failed:', error);
+  }
+}
 
 // ========== VOLUNTEER FORM ==========
 const volunteerFormSB = document.getElementById('volunteer-form');
@@ -253,8 +278,54 @@ if (missingPetFormSB) {
       alert('Something went wrong! Please try again.');
       console.error(error);
     } else {
+      await notifyMissingPetSubscribers('missing_reported', formData);
       alert('Report submitted! We will contact you soon 🐾');
       missingPetFormSB.reset();
     }
   });
+}
+
+// ========== PUBLIC MISSING PET LIST ==========
+const publicMissingPetsList = document.getElementById('missing-pets-public-list');
+if (publicMissingPetsList) {
+  loadPublicMissingPets();
+}
+
+async function loadPublicMissingPets() {
+  const { data, error } = await supabaseClient
+    .from('missing_pets')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error(error);
+    publicMissingPetsList.innerHTML = '<p class="loading-text">Unable to load missing pet reports right now.</p>';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    publicMissingPetsList.innerHTML = '<p class="loading-text">No missing pet reports yet.</p>';
+    return;
+  }
+
+  publicMissingPetsList.innerHTML = data.map(function (pet) {
+    const found = isPetFound(pet);
+    const foundNote = formatFoundMessage(pet.other_details);
+    const statusClass = found ? 'missing-pet-status--found' : 'missing-pet-status--missing';
+    const statusText = found ? 'Found' : 'Still Missing';
+    const lastSeenDate = pet.date_last_seen ? new Date(pet.date_last_seen).toLocaleDateString('en-IN') : '-';
+
+    return `
+      <article class="missing-pet-card">
+        ${pet.photo_url ? `<img src="${pet.photo_url}" alt="${pet.pet_name || 'Missing pet'}">` : ''}
+        <span class="missing-pet-status ${statusClass}">${statusText}</span>
+        <h3>${pet.pet_name || 'Unnamed pet'}</h3>
+        <p><strong>Breed/Species:</strong> ${pet.species_breed || '-'}</p>
+        <p><strong>Last Seen:</strong> ${pet.last_seen_location || '-'}</p>
+        <p><strong>Date Last Seen:</strong> ${lastSeenDate}</p>
+        <p><strong>Description:</strong> ${pet.description || '-'}</p>
+        ${found && foundNote ? `<p><strong>Update:</strong> ${foundNote}</p>` : ''}
+      </article>
+    `;
+  }).join('');
 }
