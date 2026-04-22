@@ -16,14 +16,21 @@
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span aria-hidden="true">☰</span></button>
       <nav>
         <ul class="nav-menu" id="nav-menu">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="adopt.html" class="active">Adopt</a></li>
-          <li><a href="community.html">Community</a></li>
-          <li><a href="missing-pet.html">Missing Pet</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="volunteer.html">Volunteer</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="index.html" class="">Home</a></li>
+          <li><a href="about.html" class="">About</a></li>
+          <li><a href="adopt.html" class="nav-highlight nav-adopt active">Adopt</a></li>
+          <li><a href="missing-pet.html" class="nav-highlight nav-missing">Missing Pet</a></li>
+          <li><a href="profile.html" class="">Profile</a></li>
+          <li class="auth-menu-item"><a href="login.html" class="">Login</a></li>
+          <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn" style="cursor:default;">More &#9662;</a>
+            <div class="dropdown-content">
+              <a href="community.html" class="">Community</a>
+              <a href="blog.html" class="">Blog</a>
+              <a href="volunteer.html" class="">Volunteer</a>
+              <a href="contact.html" class="">Contact</a>
+            </div>
+          </li>
         </ul>
       </nav>
     </div>
@@ -57,6 +64,18 @@
     <section class="section">
       <div class="container">
         <div class="section-title">
+          <h2>Active Adoptions</h2>
+          <p>Meet our beautiful rescues currently looking for their forever homes</p>
+        </div>
+        <div id="active-adoptions-list" class="cards-grid">
+          <p class="loading-text">Loading adoptions...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="container">
+        <div class="section-title">
           <h2>Adoption Process</h2>
           <p>Simple steps to bring your new family member home</p>
         </div>
@@ -86,9 +105,10 @@
         <div class="content-section reveal">
           <h2>Ready to Adopt?</h2>
           <p>Click below to open our adoption interest form. We'll get back to you soon.</p>
-          <p style="margin-top: 1.5rem;">
+          <p style="margin-top: 1.5rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button onclick="openApplyModal()" class="btn btn-primary" style="background:#2d5016; color:white; border:none; padding:0.75rem 1.5rem; font-size:1rem; border-radius:var(--radius-sm); cursor:pointer;">Apply via Website (Trackable)</button>
             <a href="https://docs.google.com/forms/d/1wLMS3NuUmOusJlADTUqWFlHY_qcFWBlGmS8oxU-yhu0/viewform?pli=1&pli=1&edit_requested=true"
-              target="_blank" rel="noopener" class="btn btn-primary">Open Adoption Interest Form</a>
+              target="_blank" rel="noopener" class="btn" style="border:1px solid #2d5016; color:#2d5016; padding:0.75rem 1.5rem; text-decoration:none; border-radius:var(--radius-sm); font-weight:600;">Quick Apply via Google Form</a>
           </p>
           <p style="margin-top: 1rem; color: var(--color-text-muted); font-size: 0.95rem;">If you prefer to express
             interest via our website, <a href="contact.html">contact us</a> with the subject "Adoption interest" and
@@ -96,6 +116,35 @@
         </div>
       </div>
     </section>
+
+  <!-- Adoption Application Modal -->
+  <div id="apply-modal" class="modal-overlay">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeApplyModal()">×</button>
+      <h2>Apply for Adoption</h2>
+      <p style="margin-bottom: 1rem; color: var(--color-text-muted); font-size: 0.9rem;">Submit this form to apply directly on our site and track your status.</p>
+      <form id="apply-form">
+        <input type="hidden" id="apply-pet-id">
+        <div class="form-group">
+          <label>Your Name *</label>
+          <input type="text" id="apply-name" required>
+        </div>
+        <div class="form-group">
+          <label>Your Email *</label>
+          <input type="email" id="apply-email" required>
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" id="apply-phone" required>
+        </div>
+        <div class="form-group">
+          <label>Why do you want to adopt? *</label>
+          <textarea id="apply-why" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Submit Application</button>
+      </form>
+    </div>
+  </div>
   </main>
 
   <footer class="site-footer">
@@ -130,6 +179,7 @@
       <p>© 2025 Juno The Choco Lab. All rights reserved.</p>
     </div>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/script.js"></script>
 </body>
 

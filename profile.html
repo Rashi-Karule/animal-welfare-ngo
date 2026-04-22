@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | Juno The Choco Lab</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <header class="site-header" id="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">Juno <span>the Choco Lab</span></a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span aria-hidden="true">☰</span></button>
+      <nav>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="index.html" class="">Home</a></li>
+          <li><a href="about.html" class="">About</a></li>
+          <li><a href="adopt.html" class="nav-highlight nav-adopt">Adopt</a></li>
+          <li><a href="missing-pet.html" class="nav-highlight nav-missing">Missing Pet</a></li>
+          <li><a href="profile.html" class="active">Profile</a></li>
+          <li class="auth-menu-item"><a href="login.html" class="">Login</a></li>
+          <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn" style="cursor:default;">More &#9662;</a>
+            <div class="dropdown-content">
+              <a href="community.html" class="">Community</a>
+              <a href="blog.html" class="">Blog</a>
+              <a href="volunteer.html" class="">Volunteer</a>
+              <a href="contact.html" class="">Contact</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1>My Profile</h1>
+        <p>Track your adoption applications and manage your missing pet reports.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="dashboard-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+          
+          <div class="content-section">
+            <h2>My Adoption Applications</h2>
+            <div id="user-applications-list">
+              <p class="loading-text">Loading your applications...</p>
+            </div>
+          </div>
+
+          <div class="content-section">
+            <h2>My Missing Pets</h2>
+            <div id="user-missing-pets-list">
+              <p class="loading-text">Loading your missing pets...</p>
+            </div>
+            <a href="missing-pet.html" class="btn btn-primary" style="margin-top:1rem; display:inline-block;">Report Another Pet</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <h4>Navigate</h4>
+        <a href="about.html">About</a>
+        <a href="adopt.html">Adopt</a>
+        <a href="community.html">Community</a>
+        <a href="blog.html">Blog</a>
+        <a href="volunteer.html">Volunteer</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="missing-pet.html">Missing Pet Helpline</a>
+        <a href="blog.html">Advocacy & Blog</a>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <div class="social-links">
+          <a href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">f</a>
+          <a href="https://www.instagram.com/juno.thechocolab?igsh=cG9lODJuc3VwM3Nr" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener" aria-label="Twitter">𝕏</a>
+          <a href="https://youtube.com/@malvika.vazalwar?si=iDr0T2ovxwwsHHtM" target="_blank" rel="noopener" aria-label="YouTube">▶</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Juno The Choco Lab. All rights reserved.</p>
+    </div>
+  </footer>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Wait a moment for auth to initialize
+      setTimeout(loadUserDashboard, 1000);
+    });
+
+    async function loadUserDashboard() {
+      if (!currentUser) {
+        document.getElementById('user-applications-list').innerHTML = '<p>Please <a href="login.html" style="font-weight:bold; color:var(--color-primary); text-decoration:underline;">log in</a> to view your applications.</p>';
+        document.getElementById('user-missing-pets-list').innerHTML = '<p>Please <a href="login.html" style="font-weight:bold; color:var(--color-primary); text-decoration:underline;">log in</a> to view your reports.</p>';
+        return;
+      }
+
+      // Load Applications
+      const { data: apps, error: appError } = await supabaseClient
+        .from('adoption_applications')
+        .select('*, active_adoptions(name, breed)')
+        .eq('user_id', currentUser.id)
+        .order('created_at', { ascending: false });
+
+      const appList = document.getElementById('user-applications-list');
+      if (appError || !apps || apps.length === 0) {
+        appList.innerHTML = '<p style="color:var(--color-text-muted);">You have no active adoption applications.</p>';
+      } else {
+        appList.innerHTML = apps.map(app => `
+          <div style="background:var(--color-beige); padding:1rem; border-radius:var(--radius-sm); margin-bottom:1rem;">
+            <p><strong>Applying for:</strong> ${app.active_adoptions ? app.active_adoptions.name : 'Any dog'}</p>
+            <p><strong>Status:</strong> <span class="badge" style="background:#2d5016; color:white;">${app.status}</span></p>
+            <p style="font-size:0.85rem; margin-top:0.5rem;">Submitted on: ${new Date(app.created_at).toLocaleDateString()}</p>
+          </div>
+        `).join('');
+      }
+
+      // Load Missing Pets
+      const { data: pets, error: petError } = await supabaseClient
+        .from('missing_pets')
+        .select('*')
+        .eq('owner_id', currentUser.id)
+        .order('created_at', { ascending: false });
+
+      const petList = document.getElementById('user-missing-pets-list');
+      if (petError || !pets || pets.length === 0) {
+        petList.innerHTML = '<p style="color:var(--color-text-muted);">You have not reported any missing pets.</p>';
+      } else {
+        petList.innerHTML = pets.map(pet => {
+          const isFound = (pet.other_details || '').includes('[[FOUND]]');
+          return `
+          <div style="background:#fff; border:1px solid #eee; padding:1rem; border-radius:var(--radius-sm); margin-bottom:1rem;">
+            <p><strong>Name:</strong> ${pet.pet_name} <span class="badge">${isFound ? 'Found' : 'Missing'}</span></p>
+            <p><strong>Last Seen:</strong> ${pet.last_seen_location}</p>
+            <p style="font-size:0.85rem; margin-top:0.5rem;"><a href="missing-pet.html#pet-${pet.id}">View Public Page</a></p>
+          </div>
+        `}).join('');
+      }
+    }
+  </script>
+</body>
+</html>

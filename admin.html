@@ -299,6 +299,14 @@
                 <h3 id="count-newsletter">-</h3>
                 <p>Newsletter Subscribers</p>
             </div>
+            <div class="stat-card">
+                <h3 id="count-adoptions">-</h3>
+                <p>Active Adoptions</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="count-applications">-</h3>
+                <p>Adoption Apps</p>
+            </div>
         </div>
 
         <!-- TABS -->
@@ -307,29 +315,14 @@
                     id="tab-count-volunteers">0</span></button>
             <button class="tab-btn" onclick="showTab('missing')">Missing Pets <span class="count-badge"
                     id="tab-count-missing">0</span></button>
-            <button class="tab-btn" onclick="showTab('contact')">Contact Messages <span class="count-badge"
+            <button class="tab-btn" onclick="showTab('adoptions')">Active Adoptions <span class="count-badge"
+                    id="tab-count-adoptions">0</span></button>
+            <button class="tab-btn" onclick="showTab('applications')">Adoption Apps <span class="count-badge"
+                    id="tab-count-applications">0</span></button>
+            <button class="tab-btn" onclick="showTab('contact')">Contact <span class="count-badge"
                     id="tab-count-contact">0</span></button>
             <button class="tab-btn" onclick="showTab('newsletter')">Newsletter <span class="count-badge"
                     id="tab-count-newsletter">0</span></button>
-        </div>
-
-        <div class="admin-panel">
-            <h3>Add Missing Pet (Admin)</h3>
-            <form id="admin-missing-pet-form">
-                <div class="admin-form-grid">
-                    <input type="text" id="admin-pet-name" placeholder="Pet name *" required>
-                    <input type="text" id="admin-species" placeholder="Species / breed">
-                    <input type="text" id="admin-last-seen" placeholder="Last seen location *" required>
-                    <input type="date" id="admin-date-last-seen" required>
-                    <input type="text" id="admin-reporter-name" placeholder="Reporter name *" required>
-                    <input type="email" id="admin-reporter-email" placeholder="Reporter email *" required>
-                    <input type="text" id="admin-reporter-phone" placeholder="Reporter phone *" required>
-                    <input type="file" id="admin-pet-photo" accept="image/*">
-                    <textarea id="admin-pet-description" placeholder="Description *" required></textarea>
-                    <textarea id="admin-other-details" placeholder="Other details (optional)"></textarea>
-                </div>
-                <button type="submit" class="logout-btn" style="margin-top:0.75rem; background:#2d5016;">Add Missing Pet</button>
-            </form>
         </div>
 
         <!-- VOLUNTEERS TABLE -->
@@ -357,6 +350,24 @@
 
         <!-- MISSING PETS TABLE -->
         <div class="tab-content" id="tab-missing">
+            <div class="admin-panel">
+                <h3>Add Missing Pet (Admin)</h3>
+                <form id="admin-missing-pet-form">
+                    <div class="admin-form-grid">
+                        <input type="text" id="admin-pet-name" placeholder="Pet name *" required>
+                        <input type="text" id="admin-species" placeholder="Species / breed">
+                        <input type="text" id="admin-last-seen" placeholder="Last seen location *" required>
+                        <input type="date" id="admin-date-last-seen" required>
+                        <input type="text" id="admin-reporter-name" placeholder="Reporter name *" required>
+                        <input type="email" id="admin-reporter-email" placeholder="Reporter email *" required>
+                        <input type="text" id="admin-reporter-phone" placeholder="Reporter phone *" required>
+                        <input type="file" id="admin-pet-photo" accept="image/*">
+                        <textarea id="admin-pet-description" placeholder="Description *" required></textarea>
+                        <textarea id="admin-other-details" placeholder="Other details (optional)"></textarea>
+                    </div>
+                    <button type="submit" class="logout-btn" style="margin-top:0.75rem; background:#2d5016;">Add Missing Pet</button>
+                </form>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -377,6 +388,65 @@
                 <tbody id="missing-body">
                     <tr>
                         <td colspan="12" class="loading">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ACTIVE ADOPTIONS TABLE -->
+        <div class="tab-content" id="tab-adoptions">
+            <div class="admin-panel">
+                <h3>Add Active Adoption (Puppy/Dog)</h3>
+                <form id="admin-adoptions-form">
+                    <div class="admin-form-grid">
+                        <input type="text" id="adopt-name" placeholder="Name *" required>
+                        <input type="text" id="adopt-breed" placeholder="Breed/Species *" required>
+                        <input type="text" id="adopt-age" placeholder="Age (e.g., 2 months) *" required>
+                        <input type="file" id="adopt-photo" accept="image/*">
+                        <textarea id="adopt-description" placeholder="Description & Personality *" required style="grid-column: 1 / -1;"></textarea>
+                    </div>
+                    <button type="submit" class="logout-btn" style="margin-top:0.75rem; background:#2d5016;">Add for Adoption</button>
+                </form>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Breed</th>
+                        <th>Age</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Photo</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="adoptions-body">
+                    <tr>
+                        <td colspan="8" class="loading">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ADOPTION APPLICATIONS TABLE -->
+        <div class="tab-content" id="tab-applications">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Applicant</th>
+                        <th>Email / Phone</th>
+                        <th>Applied For</th>
+                        <th>Why Adopt?</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="applications-body">
+                    <tr>
+                        <td colspan="8" class="loading">Loading...</td>
                     </tr>
                 </tbody>
             </table>
@@ -496,6 +566,8 @@
             await Promise.all([
                 loadVolunteers(),
                 loadMissingPets(),
+                loadActiveAdoptions(),
+                loadApplications(),
                 loadContacts(),
                 loadNewsletter()
             ]);
@@ -566,12 +638,25 @@
         <td>${row.photo_url ? `<a href="${row.photo_url}" target="_blank" class="photo-link">View Photo</a>` : '-'}</td>
         <td>
           <button class="small-btn ${isPetFound(row) ? 'reopen-btn' : 'found-btn'}"
-            onclick="toggleFoundStatus('${row.id}', '${(row.other_details || '').replace(/'/g, "\\'")}', ${isPetFound(row)})">
+            onclick="toggleFoundStatus('${row.id}', '${(row.other_details || '').replace(/'/g, "\\'")}', ${isPetFound(row)})" style="margin-bottom:0.25rem;">
             ${isPetFound(row) ? 'Mark Missing' : 'Mark Found'}
           </button>
+          <br>
+          <button class="small-btn" style="background:#c45c5c;" onclick="deleteMissingPetAdmin('${row.id}')">Delete</button>
         </td>
       </tr>
     `).join('');
+        }
+
+        async function deleteMissingPetAdmin(id) {
+            if (confirm("Are you sure you want to delete this missing pet report?")) {
+                const { error } = await supabaseClient.from('missing_pets').delete().eq('id', id);
+                if (error) {
+                    alert("Failed to delete. " + error.message);
+                } else {
+                    loadMissingPets();
+                }
+            }
         }
 
         async function toggleFoundStatus(id, otherDetails, currentlyFound) {
@@ -642,6 +727,162 @@
                 alert('Missing pet added successfully.');
                 loadMissingPets();
             });
+        }
+
+        // ===== ACTIVE ADOPTIONS =====
+        async function loadActiveAdoptions() {
+            const { data, error } = await supabaseClient
+                .from('active_adoptions')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) { console.error(error); return; }
+
+            const count = data.length;
+            document.getElementById('count-adoptions').textContent = count;
+            document.getElementById('tab-count-adoptions').textContent = count;
+
+            const tbody = document.getElementById('adoptions-body');
+            if (count === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="loading">No active adoptions</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.name || '-'}</td>
+        <td>${row.breed || '-'}</td>
+        <td>${row.age || '-'}</td>
+        <td>${row.description || '-'}</td>
+        <td>${row.status === 'Adopted' ? '<span class="badge" style="background:#f5f0e8;color:#8a4b00;">Adopted</span>' : '<span class="badge">Available</span>'}</td>
+        <td>${row.photo_url ? `<a href="${row.photo_url}" target="_blank" class="photo-link">View Photo</a>` : '-'}</td>
+        <td>
+          <button class="small-btn ${row.status === 'Adopted' ? 'reopen-btn' : 'found-btn'}"
+            onclick="toggleAdoptionStatus('${row.id}', '${row.status}')" style="margin-bottom:0.25rem;">
+            ${row.status === 'Adopted' ? 'Mark Available' : 'Mark Adopted'}
+          </button>
+          <br>
+          <button class="small-btn" style="background:#c45c5c;" onclick="deleteAdoption('${row.id}')">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+        }
+
+        async function toggleAdoptionStatus(id, currentStatus) {
+            const newStatus = currentStatus === 'Adopted' ? 'Available' : 'Adopted';
+            const { error } = await supabaseClient
+                .from('active_adoptions')
+                .update({ status: newStatus })
+                .eq('id', id);
+            if (error) {
+                alert('Update failed.');
+                console.error(error);
+            } else {
+                loadActiveAdoptions();
+            }
+        }
+
+        async function deleteAdoption(id) {
+            if (confirm("Are you sure you want to delete this adoption listing?")) {
+                const { error } = await supabaseClient.from('active_adoptions').delete().eq('id', id);
+                if (error) {
+                    alert("Failed to delete.");
+                } else {
+                    loadActiveAdoptions();
+                }
+            }
+        }
+
+        const adminAdoptionsForm = document.getElementById('admin-adoptions-form');
+        if (adminAdoptionsForm) {
+            adminAdoptionsForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                let photoUrl = null;
+                const photoInput = document.getElementById('adopt-photo');
+                
+                // Set loading state if needed
+                if (photoInput.files[0]) {
+                    const file = photoInput.files[0];
+                    const fileName = Date.now() + '_' + file.name;
+                    const { error: uploadError } = await supabaseClient.storage
+                        .from('pet-photos')
+                        .upload(fileName, file);
+                    if (uploadError) {
+                        alert('Photo upload failed. You can still add without photo.');
+                        console.error(uploadError);
+                    } else {
+                        const { data } = supabaseClient.storage.from('pet-photos').getPublicUrl(fileName);
+                        photoUrl = data.publicUrl;
+                    }
+                }
+
+                const payload = {
+                    name: document.getElementById('adopt-name').value.trim(),
+                    breed: document.getElementById('adopt-breed').value.trim(),
+                    age: document.getElementById('adopt-age').value.trim(),
+                    description: document.getElementById('adopt-description').value.trim(),
+                    photo_url: photoUrl,
+                    status: 'Available'
+                };
+
+                const { error } = await supabaseClient.from('active_adoptions').insert([payload]);
+                if (error) {
+                    alert('Failed to add adoption listing.');
+                    console.error(error);
+                    return;
+                }
+                adminAdoptionsForm.reset();
+                alert('Adoption listing added successfully.');
+                loadActiveAdoptions();
+            });
+        }
+
+        // ===== ADOPTION APPLICATIONS =====
+        async function loadApplications() {
+            const { data, error } = await supabaseClient
+                .from('adoption_applications')
+                .select('*, active_adoptions(name, breed)')
+                .order('created_at', { ascending: false });
+
+            if (error) { console.error(error); return; }
+
+            const count = data.length;
+            document.getElementById('count-applications').textContent = count;
+            document.getElementById('tab-count-applications').textContent = count;
+
+            const tbody = document.getElementById('applications-body');
+            if (count === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="loading">No applications yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map((row, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${row.applicant_name || '-'}</td>
+        <td>${row.applicant_email}<br>${row.applicant_phone}</td>
+        <td>${row.active_adoptions ? row.active_adoptions.name : 'Any dog'}</td>
+        <td>${row.why_adopt || '-'}</td>
+        <td><span class="badge" style="background:#2d5016; color:white;">${row.status}</span></td>
+        <td>${formatDate(row.created_at)}</td>
+        <td>
+          <button class="small-btn found-btn" onclick="updateAppStatus('${row.id}', 'Approved')">Approve</button><br>
+          <button class="small-btn found-btn" onclick="updateAppStatus('${row.id}', 'Rejected')" style="background:#c45c5c; margin-top:5px;">Reject</button>
+        </td>
+      </tr>
+    `).join('');
+        }
+
+        async function updateAppStatus(id, newStatus) {
+            const { error } = await supabaseClient
+                .from('adoption_applications')
+                .update({ status: newStatus })
+                .eq('id', id);
+            if (error) {
+                alert('Update failed.');
+                console.error(error);
+            } else {
+                loadApplications();
+            }
         }
 
         // ===== CONTACT =====

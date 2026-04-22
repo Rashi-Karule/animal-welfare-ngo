@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Juno The Choco Lab</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <header class="site-header" id="site-header">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">Juno <span>the Choco Lab</span></a>
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span aria-hidden="true">☰</span></button>
+      <nav>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="index.html" class="">Home</a></li>
+          <li><a href="about.html" class="">About</a></li>
+          <li><a href="adopt.html" class="nav-highlight nav-adopt">Adopt</a></li>
+          <li><a href="missing-pet.html" class="nav-highlight nav-missing">Missing Pet</a></li>
+          <li><a href="profile.html" class="">Profile</a></li>
+          <li class="auth-menu-item"><a href="login.html" class="active">Login</a></li>
+          <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn" style="cursor:default;">More &#9662;</a>
+            <div class="dropdown-content">
+              <a href="community.html" class="">Community</a>
+              <a href="blog.html" class="">Blog</a>
+              <a href="volunteer.html" class="">Volunteer</a>
+              <a href="contact.html" class="">Contact</a>
+            </div>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="auth-box reveal">
+          <h2>Welcome Back</h2>
+          <form id="login-form">
+            <div class="form-group">
+              <label for="login-email">Email</label>
+              <input type="email" id="login-email" required>
+            </div>
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <input type="password" id="login-password" required>
+            </div>
+            <p id="login-error" class="form-error"></p>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Login</button>
+          </form>
+          <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div>
+        <h4>Navigate</h4>
+        <a href="about.html">About</a>
+        <a href="adopt.html">Adopt</a>
+        <a href="community.html">Community</a>
+        <a href="blog.html">Blog</a>
+        <a href="volunteer.html">Volunteer</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <a href="missing-pet.html">Missing Pet Helpline</a>
+        <a href="blog.html">Advocacy & Blog</a>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <div class="social-links">
+          <a href="https://facebook.com" target="_blank" rel="noopener">f</a>
+          <a href="https://www.instagram.com/juno.thechocolab?igsh=cG9lODJuc3VwM3Nr" target="_blank" rel="noopener">📷</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener">𝕏</a>
+          <a href="https://youtube.com/@malvika.vazalwar?si=iDr0T2ovxwwsHHtM" target="_blank" rel="noopener">▶</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Juno The Choco Lab. All rights reserved.</p>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>

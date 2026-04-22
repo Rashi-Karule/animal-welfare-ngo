@@ -1,7 +1,7 @@
 <div align="center">
 
 # 🐾 Juno The Choco Lab
-### Animal Welfare NGO — Full Stack Website
+### Comprehensive Animal Welfare & NGO Platform
 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-animal--welfare--ngo.vercel.app-2d5016?style=for-the-badge)](https://animal-welfare-ngo.vercel.app)
 [![GitHub](https://img.shields.io/badge/GitHub-Rashi--Karule-181717?style=for-the-badge&logo=github)](https://github.com/Rashi-Karule/animal-welfare-ngo)
@@ -14,151 +14,100 @@
 
 ---
 
-## 🌟 Overview
+## 🌟 Executive Summary
 
-**Juno The Choco Lab** is a fully functional, production-deployed website for an animal welfare NGO based in India. Built for **Malvika Vazalwar**, founder and animal welfare advocate, the platform enables community-driven rescue, adoption, and advocacy — connecting animals in need with compassionate humans.
+**Juno The Choco Lab** is a robust, production-ready full-stack web platform built for animal welfare advocacy. Designed with a focus on usability, community engagement, and data-driven management, the platform bridges the gap between stray animals in need and compassionate individuals.
 
-The site features a complete **Supabase backend**, password-protected **admin dashboard**, live **missing pet helpline**, and seamless volunteer management — all built with zero frameworks, pure vanilla web technologies.
-
----
-
-## ✨ Features
-
-### 🐕 Public Pages (8 pages)
-- **Home** — Mission statement, impact statistics with animated counters, YouTube advocacy content
-- **About** — Founder's story, team, and NGO philosophy
-- **Adopt** — Adoption listings and process guide
-- **Community** — Events, community stories, and updates
-- **Missing Pet Helpline** — Report missing pets with photo upload
-- **Blog** — Advocacy articles and animal welfare content
-- **Volunteer** — Sign-up form with role-based options
-- **Contact** — Contact form + newsletter subscription
-
-### 🗄️ Backend (Supabase)
-- **4 relational tables** — `volunteer_signups`, `missing_pets`, `contact_messages`, `newsletter_subscribers`
-- **Supabase Storage** — Photo uploads for missing pet reports (`pet-photos` bucket)
-- **REST API integration** — Real-time form submissions via Supabase JS SDK
-- **Custom RLS policies** — Storage security for file uploads
-
-### 🔐 Admin Dashboard (`/admin.html`)
-- Password-protected login screen
-- Live stats — total volunteers, missing pet reports, messages, subscribers
-- 4-tab data view with sortable tables
-- Photo preview links for missing pet reports
-- No external CMS needed — built entirely in vanilla JS
-
-### 🎨 Frontend
-- Fully **mobile-responsive** design
-- **Scroll reveal animations** — elements animate as you scroll
-- **Animated impact counters** — numbers count up on scroll
-- Sticky navigation with scroll shadow
-- Mobile hamburger menu
+What started as a simple static website has evolved into a dynamic application featuring **user authentication**, **interactive geolocation**, **real-time application tracking**, and a **secure administrative dashboard**. By relying on pure vanilla web technologies combined with a powerful **Supabase Backend-as-a-Service (BaaS)**, the platform achieves blazing fast performance without the overhead of heavy frontend frameworks.
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 Key Objectives
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | HTML5, CSS3, Vanilla JavaScript |
-| Backend | Supabase (PostgreSQL) |
-| Storage | Supabase Storage |
-| Auth | Custom password-based admin login |
-| Deployment | Vercel |
-| Version Control | Git + GitHub |
+1. **Facilitate Rescues & Reunions:** Provide a real-time, interactive board for reporting missing pets with map integrations to pinpoint exact last-seen locations.
+2. **Streamline Adoptions:** Replace disjointed, third-party forms with native, trackable adoption applications integrated directly into user profiles.
+3. **Centralize Administration:** Equip the NGO founder with a comprehensive admin dashboard to manage adoptions, review missing pet alerts, and manage incoming volunteers and contacts.
+4. **Drive Community Action:** Empower users with one-click social sharing tools and auto-generated printable flyers to maximize exposure for animals in need.
 
 ---
 
-## 📁 Project Structure
+## 💻 Tech Stack & Architecture
 
-```
-animal-welfare-ngo/
-├── index.html          # Home page
-├── about.html          # About page
-├── adopt.html          # Adoption page
-├── community.html      # Community page
-├── missing-pet.html    # Missing pet helpline
-├── blog.html           # Blog page
-├── volunteer.html      # Volunteer sign-up
-├── contact.html        # Contact + newsletter
-├── admin.html          # 🔐 Admin dashboard
-├── css/
-│   └── styles.css      # All styling
-├── js/
-│   └── script.js       # All JS + Supabase integration
-└── images/             # Site images
-```
+- **Frontend Core:** HTML5, CSS3 (Custom Variables, Flexbox, CSS Grid), Vanilla JavaScript (ES6+).
+- **Backend & Database:** [Supabase](https://supabase.com/) (PostgreSQL).
+- **Authentication:** Supabase Auth (Email/Password credentials).
+- **Storage:** Supabase Storage buckets (for high-resolution pet photo uploads).
+- **Mapping APIs:** [Leaflet.js](https://leafletjs.com/) with OpenStreetMap tiles for interactive geolocation.
+- **Hosting & Deployment:** [Vercel](https://vercel.com/) (Frontend) connected to GitHub for CI/CD.
 
 ---
 
-## 🗃️ Database Schema
+## ✨ Comprehensive Feature Breakdown
 
-```sql
--- Volunteer sign-ups
-volunteer_signups (id, name, email, phone, city, how_to_help, message, created_at)
+### 1. Robust User Authentication & Profiles
+*   **Secure Sign-Up/Log-In:** Users can securely create accounts and authenticate via Supabase.
+*   **Dynamic Navigation:** The UI adapts instantly upon login, replacing the login button with a personalized **Profile** and **Logout** tab.
+*   **User Dashboard (`profile.html`):** A dedicated hub where users can:
+    *   Track the live status of their adoption applications (e.g., Pending, Approved, Rejected).
+    *   Manage missing pet reports they have submitted (with quick links to view them publicly).
 
--- Missing pet reports
-missing_pets (id, name, email, phone, pet_name, species_breed,
-              description, last_seen_location, date_last_seen,
-              other_details, photo_url, created_at)
+### 2. Missing Pet Helpline & Interactive Maps
+*   **Geolocation Integration:** When reporting a missing pet, users can drop a precise pin on an interactive **Leaflet Map**.
+*   **Dynamic Map Links:** Public missing pet cards automatically generate Google Maps routing links based on the saved latitude and longitude.
+*   **Ownership Controls:** Logged-in users who reported a missing pet see exclusive "Edit" and "Delete" buttons on their own posts.
+*   **Found Status Toggle:** Users can update their reports by adding `[[FOUND]]` to the description, dynamically changing the UI badge to a green "Found" status.
 
--- Contact messages
-contact_messages (id, name, email, subject, message, created_at)
+### 3. Print & Social Sharing Tools
+*   **Auto-Generated Printable Flyers:** A built-in "🖨️ Print Flyer" button that extracts the pet's photo, name, and contact details, formats them into a high-contrast missing poster, and natively launches the browser's print dialog.
+*   **One-Click Social Sharing:** Pre-formatted deep links allow users to instantly share a pet's profile to **WhatsApp** and **Facebook**, auto-populating the message text and URL to drive immediate community awareness.
 
--- Newsletter subscribers
-newsletter_subscribers (id, email, created_at)
-```
+### 4. Native Adoption Application Tracking
+*   **Direct-on-Site Applications:** Transitioned from external Google Forms to a native modal-based application system. Users click "🐶 Apply to Adopt", filling out their motivations directly on the platform.
+*   **Database Linking:** Applications are securely linked via Foreign Keys to both the `auth.users` table (the applicant) and the `active_adoptions` table (the specific dog).
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- A browser + Live Server (VS Code extension) for local development
-- Supabase account (for backend)
-- Vercel account (for deployment)
-
-### Run Locally
-```bash
-# Clone the repo
-git clone https://github.com/Rashi-Karule/animal-welfare-ngo.git
-
-# Open in VS Code
-cd animal-welfare-ngo
-
-# Run with Live Server
-# Right click index.html → Open with Live Server
-```
-
-> ⚠️ Must use Live Server (`http://`) — Supabase does not work on `file://` protocol
----
-
-## 🔐 Admin Access
-
-The admin dashboard is accessible at:
-```
-https://animal-welfare-ngo.vercel.app/admin.html
-```
-Password-protected — contact the project owner for credentials.
+### 5. Secure Admin Dashboard (`admin.html`)
+A password-protected hub built for the NGO founder to oversee all operations:
+*   **Analytics Overview:** Top-level metric cards displaying counts of active adoptions, pending applications, registered volunteers, and newsletter subscribers.
+*   **Tabbed Interface:** Clean, JavaScript-driven UI switching between datasets without page reloads.
+*   **Adoption Management:** The admin can upload new rescues (complete with photo uploads to Supabase Storage) and delete adopted pets.
+*   **Application Review:** The admin can view incoming adoption requests and click "Approve" or "Reject", immediately updating the status on the applicant's frontend profile dashboard.
 
 ---
 
-## 👩‍💻 Developer
+## 🗄️ Database Schema & Structure
 
-Built with 💚 by **Rashi Karule**
+The platform relies on a normalized PostgreSQL database hosted on Supabase:
 
-[![GitHub](https://img.shields.io/badge/GitHub-Rashi--Karule-181717?style=flat&logo=github)](https://github.com/Rashi-Karule)
+1.  **`missing_pets`**:
+    *   Stores `pet_name`, `species_breed`, `last_seen_location`, `description`, `photo_url`.
+    *   *Geospatial fields:* `lat` (FLOAT), `lng` (FLOAT).
+    *   *Relational fields:* `owner_id` (UUID references `auth.users`).
+2.  **`active_adoptions`**:
+    *   Stores `name`, `breed`, `age`, `description`, `status` (Available/Adopted).
+3.  **`adoption_applications`**:
+    *   *Relational fields:* `user_id` (UUID references `auth.users`), `adoption_id` (UUID references `active_adoptions`).
+    *   Stores applicant data (`applicant_name`, `phone`, `why_adopt`) and tracking `status` (Pending/Approved/Rejected).
+4.  **`volunteer_signups`**, **`contact_messages`**, **`newsletter_subscribers`**: Dedicated tables for capturing community engagement and CRM data.
 
 ---
 
-## 💛 Built For
+## 🎨 UI/UX Enhancements
 
-Built for **Malvika Vazalwar** — Animal welfare advocate, Founder of Juno The Choco Lab, and the human behind Juno 🐶
-
-> *"Their treatment reflects the consciousness of our society."*
+*   **Premium CSS Highlights:** Important navigation actions (Adopt, Missing Pet) utilize pill-shaped highlight outlines for clear visual hierarchy.
+*   **Responsive Dropdowns:** A cleanly structured "More ▾" dropdown minimizes navbar clutter while retaining accessibility to secondary pages.
+*   **Graceful Degradation:** The platform remains functional even if JavaScript maps fail to load, falling back to text-based location inputs.
+*   **Feedback Loops:** Comprehensive success/error notifications using browser alerts and dynamic HTML DOM updates ensure the user always knows the state of their interactions.
 
 ---
 
-<div align="center">
-🐾 <i>Every commit made here helped an animal find a home.</i> 🐾
-</div>
+## 🔮 Future Scope & Expansion Possibilities
+
+*   **Email Notifications Pipeline:** Connecting Supabase Edge Functions with an email provider (like Resend or SendGrid) to automatically notify the admin when a new application is submitted.
+*   **Role-Based Access Control (RBAC):** Transitioning the client-side password protection on the Admin Dashboard to true server-side Supabase Row Level Security (RLS) policies based on user roles.
+*   **Payment Gateway Integration:** Adding Razorpay/Stripe links for direct, traceable donations for specific rescues.
+
+---
+
+### Author
+Designed and Developed for **Malvika Vazalwar**
+*A project demonstrating full-stack proficiency, database architecture, and user-centric web design.*

@@ -7,6 +7,8 @@
   <meta name="description" content="Report a missing pet - Missing Pet Helpline and community alerts.">
   <title>Missing Pet Helpline | Juno The Choco Lab</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
@@ -17,14 +19,21 @@
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle menu"><span aria-hidden="true">☰</span></button>
       <nav>
         <ul class="nav-menu" id="nav-menu">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="adopt.html">Adopt</a></li>
-          <li><a href="community.html">Community</a></li>
-          <li><a href="missing-pet.html" class="active">Missing Pet</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="volunteer.html">Volunteer</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="index.html" class="">Home</a></li>
+          <li><a href="about.html" class="">About</a></li>
+          <li><a href="adopt.html" class="nav-highlight nav-adopt">Adopt</a></li>
+          <li><a href="missing-pet.html" class="nav-highlight nav-missing active">Missing Pet</a></li>
+          <li><a href="profile.html" class="">Profile</a></li>
+          <li class="auth-menu-item"><a href="login.html" class="">Login</a></li>
+          <li class="dropdown">
+            <a href="javascript:void(0)" class="dropbtn" style="cursor:default;">More &#9662;</a>
+            <div class="dropdown-content">
+              <a href="community.html" class="">Community</a>
+              <a href="blog.html" class="">Blog</a>
+              <a href="volunteer.html" class="">Volunteer</a>
+              <a href="contact.html" class="">Contact</a>
+            </div>
+          </li>
         </ul>
       </nav>
     </div>
@@ -77,6 +86,9 @@
           <p>All fields marked * are required</p>
         </div>
         <div class="content-section" style="max-width: 600px;">
+          <div style="background:#e6f7eb; color:#1f6b3a; padding:1rem; border-radius:var(--radius-sm); margin-bottom:1rem; border:1px solid #c3e6cb; text-align:center;">
+             <strong>Notice:</strong> Please <a href="login.html" style="color:#1f6b3a; text-decoration:underline; font-weight:bold;">Log In</a> before reporting if you want to be able to edit or delete your post later!
+          </div>
           <form id="missing-pet-form" class="reveal" enctype="multipart/form-data">
             <div class="form-group">
               <label for="mp-name">Your name *</label>
@@ -108,6 +120,10 @@
             <div class="form-group">
               <label for="mp-last-seen">Last seen location (area, landmark) *</label>
               <input type="text" id="mp-last-seen" name="last_seen" required>
+              <p style="font-size: 0.85rem; color: var(--color-text-muted); margin-top: 0.5rem; margin-bottom: 0.5rem;">Or click/tap on the map to drop a pin:</p>
+              <div id="missing-pet-map" style="height: 250px; width: 100%; border-radius: var(--radius-md); border: 1px solid #ccc; z-index: 1;"></div>
+              <input type="hidden" id="mp-lat" name="lat">
+              <input type="hidden" id="mp-lng" name="lng">
             </div>
             <div class="form-group">
               <label for="mp-date">Date last seen *</label>
@@ -146,6 +162,41 @@
         </div>
       </div>
     </section>
+  <!-- Edit Pet Modal -->
+    <div id="edit-pet-modal" class="modal-overlay">
+      <div class="modal-content">
+        <button class="modal-close" onclick="closeEditModal()">×</button>
+        <h2>Edit Missing Pet Report</h2>
+        <form id="edit-pet-form">
+          <input type="hidden" id="edit-mp-id">
+          <div class="form-group">
+            <label for="edit-mp-pet-name">Pet's name *</label>
+            <input type="text" id="edit-mp-pet-name" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-mp-species">Species / Breed</label>
+            <input type="text" id="edit-mp-species">
+          </div>
+          <div class="form-group">
+            <label for="edit-mp-description">Description *</label>
+            <textarea id="edit-mp-description" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="edit-mp-last-seen">Last seen location *</label>
+            <input type="text" id="edit-mp-last-seen" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-mp-date">Date last seen *</label>
+            <input type="date" id="edit-mp-date" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-mp-message">Other Details / Update</label>
+            <textarea id="edit-mp-message"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">Save Changes</button>
+        </form>
+      </div>
+    </div>
   </main>
 
   <footer class="site-footer">
